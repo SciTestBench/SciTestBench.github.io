@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SciTestBench</title>
+<meta name="description" content="SciTestBench: Can AI Agents Find Errors in Scientific Software? A benchmark for test generation in production scientific software.">
+<meta property="og:title" content="SciTestBench">
+<meta property="og:description" content="SciTestBench: Can AI Agents Find Errors in Scientific Software? A benchmark for test generation in production scientific software.">
+<meta property="og:image" content="assets/teaser.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=Hanken+Grotesk:wght@400;500;600;700&family=Fragment+Mono:ital@0;1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+<script>try{const t=localStorage.getItem("theme");if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<symbol id="pdf" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8zM14 3v5h5M9 13h6M9 17h4"/></symbol>
+<symbol id="code" viewBox="0 0 24 24"><path d="M8 7l-5 5 5 5M16 7l5 5-5 5M14 4l-4 16"/></symbol>
+<symbol id="db" viewBox="0 0 24 24"><ellipse cx="12" cy="6" rx="8" ry="3"/><path d="M4 6v6c0 1.7 3.6 3 8 3s8-1.3 8-3V6M4 12v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6"/></symbol>
+<symbol id="bar" viewBox="0 0 24 24"><path d="M4 20h16M7 20v-8M12 20V5M17 20v-5"/></symbol>
+<symbol id="bug" viewBox="0 0 24 24"><path d="M8 8a4 4 0 0 1 8 0v1H8zM6 9h12v5a6 6 0 0 1-12 0zM12 9v11M3 13h3M18 13h3M4 7l3 2M20 7l-3 2M4 20l3-2M20 20l-3-2"/></symbol>
+<symbol id="shield" viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 4.5-3.2 8-8 9-4.8-1-8-4.5-8-9V6zM9 12l2.2 2.2L15.5 10"/></symbol>
+<symbol id="copy" viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></symbol>
+<symbol id="moon" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></symbol>
+<symbol id="sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></symbol>
+<symbol id="check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
+<symbol id="x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol>
+</defs></svg>
+
+<nav><div class="wrap">
+  <a class="brand" href="index.html">SciTestBench</a>
+  <div class="links">
+    <a href="index.html">Overview</a><a href="method.html">Method</a><a href="analysis.html">Analysis</a><a href="cases.html">Failure Cases</a><a href="impact.html">Impact</a>
+  </div>
+  <button class="theme" id="theme" aria-label="Toggle color theme"><svg class="i"><use href="#moon"/></svg></button>
+</div></nav>
+
+<header id="top"><div class="wrap">
+  <div class="venue"><i></i>Under review</div>
+  <h1>Sci<em>Test</em>Bench</h1>
+  <p class="subtitle">Can AI Agents Find Errors in Scientific Software?</p>
+  <p class="authors">Anonymous Authors</p>
+  <p class="affil">Anonymous Institution</p>
+  <div class="btns">
+    <a class="btn off" href="#" aria-disabled="true"><svg class="i"><use href="#pdf"/></svg>Paper <small>soon</small></a>
+    <a class="btn off" href="#" aria-disabled="true"><svg class="i"><use href="#code"/></svg>Code <small>soon</small></a>
+    <a class="btn off" href="#" aria-disabled="true"><svg class="i"><use href="#db"/></svg>Dataset <small>soon</small></a>
+    <a class="btn" href="#results"><svg class="i"><use href="#bar"/></svg>Leaderboard</a>
+  </div>
+</div></header>
+
+<main class="wrap">
+  <div class="teaser reveal" style="margin-top:44px">
+    <figure>
+      <div class="figcard"><img src="assets/teaser.png" alt="Two task settings: correct versus incorrect scientific assumptions for an issue, and uninformative versus revealing inputs for a sanitizer"></div>
+    </figure>
+    <div class="side">
+      <p class="eyebrow" style="text-align:left">Why it is hard</p>
+      <h2 style="text-align:left;font-size:30px">Correct code reasoning is not enough</h2>
+      <p>Correctness in scientific software depends on <b>physical and mathematical invariants</b>, numerical assumptions, and scientifically valid edge cases that are not visible from program syntax alone.</p>
+      <p>An agent has to turn that scientific meaning into an executable test. That means choosing an <b>input that reaches the faulty behavior</b> and an <b>oracle that can tell correct results from incorrect ones</b>.</p>
+      <div class="pill-row">
+        <span class="tag r"><svg class="i"><use href="#x"/></svg>Incorrect scientific assumption</span>
+        <span class="tag r"><svg class="i"><use href="#x"/></svg>Uninformative test input</span>
+        <span class="tag g"><svg class="i"><use href="#check"/></svg>Domain-grounded oracle</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="tldr narrow reveal"><b>TL;DR.</b> SciTestBench measures whether AI coding agents can write tests that expose errors in production scientific software: by reproducing reported bugs, and by proactively triggering sanitizers that encode scientific principles. The best agent reproduces 64.4% of issues and triggers 57 of 387 invariant families. Tests generated during the study led to 56 upstream reports, of which 31 were confirmed and 9 were fixed by maintainers.</div>
+
+  <section id="abstract" class="narrow reveal">
+    <p class="eyebrow">Abstract</p>
+    <h2>Testing Scientific Software with Agents</h2>
+    <p class="justify">Scientific software serves as a critical component of scientific instruments, but its errors can compromise both the integrity of the experiment and downstream scientific conclusions. Building reliable scientific software relies on rigorous testing, which provides executable safeguards by verifying reported bugs and their fixes, and uncovering new errors. We introduce <b>SciTestBench</b>, a benchmark for evaluating AI coding agents in test generation for production scientific software.</p>
+    <p class="justify">The benchmark consists of two complementary tasks: reproducing reported bugs with regression tests that fail before a fix and pass afterward, and proactively generating tests that uncover new bugs captured by sanitizers based on scientific principles. We evaluate 8 coding agents on 149 issue-reproduction tasks and 400 sanitizers across 6 scientific domains. Our evaluation shows that agents frequently make incorrect scientific assumptions, fail to exercise critical software behaviors, or construct invalid test oracles. As part of our effort to benchmark frontier agents, tests generated during our study led to 56 upstream issue reports, of which 31 were confirmed and 9 were fixed by maintainers.</p>
+  </section>
+
+  <section id="tasks">
+    <p class="eyebrow">Task Design</p>
+    <h2>Two Complementary Maintenance Tasks</h2>
+    <p class="lede">Regression testing reproduces a bug that has already been fixed. Bug finding searches for new violations of scientific constraints.</p>
+    <div class="settings reveal">
+      <div class="card set">
+        <div class="k">Task A &middot; Regression testing</div>
+        <h3><svg class="i"><use href="#bug"/></svg>Issue Reproduction Test Generation</h3>
+        <p>Given a GitHub issue and the buggy repository, submit a test-only patch that fails on the buggy revision and passes once the hidden reference fix is applied.</p>
+        <dl><dt>Input</dt><dd>Issue text + buggy revision</dd><dt>Metric</dt><dd><span class="sc">Fail</span>&rarr;<span class="sc">Pass</span> rate, manually reviewed</dd><dt>Leakage</dt><dd>Closing PRs contain no test patch</dd></dl>
+      </div>
+      <div class="card set b">
+        <div class="k">Task B &middot; Bug finding</div>
+        <h3><svg class="i"><use href="#shield"/></svg>Sanitizer-Guided Test Generation</h3>
+        <p>No bug report is given. The repository is instrumented with public scientific sanitizers, and the agent writes valid tests that trigger as many invariant families as possible.</p>
+        <dl><dt>Input</dt><dd>Instrumented repo + sanitizer bank</dd><dt>Metric</dt><dd>Distinct invariant families triggered</dd><dt>Budget</dt><dd>20 minutes per repository run</dd></dl>
+      </div>
+    </div>
+    <figure class="reveal">
+      <div class="figcard"><img src="assets/overview.png" alt="Overview of issue reproduction and sanitizer-guided test generation" loading="lazy"></div>
+      <figcaption><b>Overview.</b> (a) Issue reproduction: the fixing PR is benchmark metadata, hidden from the agent and used only by the evaluator. (b) Sanitizer-guided generation: the agent inspects the repository and public scientific invariants, then generates valid tests that expose violations. The score counts distinct triggered invariant families.</figcaption>
+    </figure>
+    <p class="note" style="text-align:center">How issues and sanitizers were curated and reviewed: <a href="method.html">Method &rarr;</a></p>
+  </section>
+
+  <section id="data">
+    <p class="eyebrow">Data Composition</p>
+    <h2>What the Benchmark Contains</h2>
+    <p class="lede">Issue tasks are drawn from 19 mature scientific repositories; the sanitizer bank covers 11 repositories.</p>
+    <div class="comp reveal">
+      <div class="card"><span class="k">Issue reproduction</span><div><b>149</b><span>tasks</span></div><div><b>19</b><span>repositories</span></div><div><b>6</b><span>domains</span></div></div>
+      <div class="card"><span class="k">Sanitizer-guided</span><div><b>400</b><span>sanitizers</span></div><div><b>387</b><span>families</span></div><div><b>11</b><span>repositories</span></div></div>
+    </div>
+    <div class="glance reveal" style="margin-top:0">
+      <div class="card">
+        <h4>Issue tasks by scientific domain (%)</h4>
+        <div class="hbars" id="domBars"></div>
+        <p class="chart-note">Share of 149 issue-reproduction tasks across 19 repositories. &dagger; fewer than eight instances.</p>
+      </div>
+      <div class="card">
+        <h4>Sanitizer bank by repository</h4>
+        <div class="hbars" id="bankBars"></div>
+        <p class="chart-note">400 sanitizers grouped into 387 invariant families across 11 repositories.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="results">
+    <p class="eyebrow">Results</p>
+    <h2>Leaderboard</h2>
+    <p class="lede">Eight model&ndash;harness configurations, each run at the model's default reasoning effort, with Internet access and repository history disabled.</p>
+    <div class="lb-ctrl">
+      <div class="seg" id="metric"><button class="on" data-k="issue">Issue <span class="sc">F</span>&rarr;<span class="sc">P</span></button><button data-k="san">Sanitizer families</button></div>
+      <div class="chips" id="harness"><button class="on" data-h="all">All harnesses</button><button data-h="Claude Code">Claude Code</button><button data-h="Codex">Codex</button><button data-h="mini-SWE-agent">mini-SWE-agent</button></div>
+    </div>
+    <div class="card tbl reveal"><div class="tbl-scroll">
+      <table id="lb">
+        <thead><tr><th style="text-align:center">Rank</th><th>Model &amp; harness</th><th class="sort on" data-k="issue">Issue <span class="sc">F&rarr;P</span> (%)</th><th class="sort" data-k="san">Sanitizer (families)</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div></div>
+    <p class="note">Issue: <span class="sc">Fail</span>&rarr;<span class="sc">Pass</span> rate on 149 tasks. Sanitizer: distinct invariant families triggered, out of 387 families (400 sanitizers). The bar scale is relative to the leading configuration.</p>
+  </section>
+
+  <section id="bugs">
+    <p class="eyebrow">Real-World Impact</p>
+    <h2>Bugs Found in Production Scientific Software</h2>
+    <p class="lede">Tests generated during our study exposed real defects, which were reported upstream to maintainers.</p>
+    <div class="impact reveal" style="max-width:640px;margin:0 auto;grid-template-columns:1fr 1fr">
+      <div class="card imp"><b data-count="31">31</b><span>Bugs confirmed by maintainers</span><small>out of 56 upstream reports</small></div>
+      <div class="card imp"><b data-count="9">9</b><span>Fixed upstream</span><small>as of the 11 October 2026 snapshot</small></div>
+    </div>
+    <p class="note" style="text-align:center">Reports by repository and representative findings: <a href="impact.html">Impact &rarr;</a></p>
+  </section>
+
+  <section id="more">
+    <p class="eyebrow">Details</p>
+    <h2>Explore the Details</h2>
+    <p class="lede">Each page expands one part of the paper.</p>
+    <div class="explore reveal">
+      <a class="card ex" href="method.html"><span class="k">Method</span><h3>Benchmark construction <span>&rarr;</span></h3><p>Issue curation criteria, the law-first sanitizer design and the curation workflow.</p></a>
+      <a class="card ex" href="analysis.html"><span class="k">Analysis</span><h3>Where performance breaks down <span>&rarr;</span></h3><p>Harness effects, success by science and SWE difficulty, per-repository sanitizer triggers, cost and test size.</p></a>
+      <a class="card ex" href="cases.html"><span class="k">Failure cases</span><h3>How agents get scientific tests wrong <span>&rarr;</span></h3><p>A failure audit and ten worked cases with the test code the agents actually generated.</p></a>
+      <a class="card ex" href="impact.html"><span class="k">Impact</span><h3>From benchmark to upstream fixes <span>&rarr;</span></h3><p>56 upstream reports, 31 confirmed and 9 fixed by maintainers, with representative findings.</p></a>
+    </div>
+  </section>
+
+  <section id="citation">
+    <p class="eyebrow">Citation</p>
+    <h2>BibTeX</h2>
+    <div class="bib" style="margin-top:20px"><button class="copy" id="cp"><svg class="i"><use href="#copy"/></svg><span>Copy</span></button>
+<pre class="bibtex" id="bibtex">@misc{scitestbench2026,
+  title  = {SciTestBench: Can AI Agents Find Errors in
+            Scientific Software?},
+  author = {Anonymous},
+  year   = {2026},
+  note   = {Under review}
+}</pre></div>
+  </section>
+</main>
+
+<footer><div class="wrap">
+  <p>SciTestBench &middot; Anonymous submission under review</p>
+  <p>Page layout follows common academic project-page conventions (e.g., Nerfies).</p>
+</div></footer>
+<div id="tip" role="tooltip"></div>
+<script src="assets/site.js"></script>
+</body>
+</html>

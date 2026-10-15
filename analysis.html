@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SciTestBench · Analysis</title>
+<meta name="description" content="Analysis of agent performance on SciTestBench: harness effects, difficulty, per-repository sanitizer triggers, cost.">
+<meta property="og:title" content="SciTestBench · Analysis">
+<meta property="og:description" content="Analysis of agent performance on SciTestBench: harness effects, difficulty, per-repository sanitizer triggers, cost.">
+<meta property="og:image" content="assets/teaser.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=Hanken+Grotesk:wght@400;500;600;700&family=Fragment+Mono:ital@0;1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+<script>try{const t=localStorage.getItem("theme");if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<symbol id="pdf" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8zM14 3v5h5M9 13h6M9 17h4"/></symbol>
+<symbol id="code" viewBox="0 0 24 24"><path d="M8 7l-5 5 5 5M16 7l5 5-5 5M14 4l-4 16"/></symbol>
+<symbol id="db" viewBox="0 0 24 24"><ellipse cx="12" cy="6" rx="8" ry="3"/><path d="M4 6v6c0 1.7 3.6 3 8 3s8-1.3 8-3V6M4 12v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6"/></symbol>
+<symbol id="bar" viewBox="0 0 24 24"><path d="M4 20h16M7 20v-8M12 20V5M17 20v-5"/></symbol>
+<symbol id="bug" viewBox="0 0 24 24"><path d="M8 8a4 4 0 0 1 8 0v1H8zM6 9h12v5a6 6 0 0 1-12 0zM12 9v11M3 13h3M18 13h3M4 7l3 2M20 7l-3 2M4 20l3-2M20 20l-3-2"/></symbol>
+<symbol id="shield" viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 4.5-3.2 8-8 9-4.8-1-8-4.5-8-9V6zM9 12l2.2 2.2L15.5 10"/></symbol>
+<symbol id="copy" viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></symbol>
+<symbol id="moon" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></symbol>
+<symbol id="sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></symbol>
+<symbol id="check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
+<symbol id="x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol>
+</defs></svg>
+
+<nav><div class="wrap">
+  <a class="brand" href="index.html">SciTestBench</a>
+  <div class="links">
+    <a href="index.html">Overview</a><a href="method.html">Method</a><a href="analysis.html">Analysis</a><a href="cases.html">Failure Cases</a><a href="impact.html">Impact</a>
+  </div>
+  <button class="theme" id="theme" aria-label="Toggle color theme"><svg class="i"><use href="#moon"/></svg></button>
+</div></nav>
+
+<header class="phead"><div class="wrap">
+  <p class="crumb"><a href="index.html">SciTestBench</a> / Analysis</p>
+  <h1>Where Performance Breaks Down</h1>
+  <p class="lede">Breakdowns behind the leaderboard. Hover any cell or marker for details.</p>
+  <div class="toc"><a href="#harness">Harness effect</a><a href="#difficulty">Difficulty</a><a href="#repos">Sanitizers by repository</a><a href="#figures">More figures</a></div>
+</div></header>
+<main class="wrap">
+
+  <section id="harness">
+    <p class="eyebrow">Harness</p>
+    <h2>Same Model, Different Harness</h2>
+    <p class="lede">Two models were run in both their native harness and mini-SWE-agent.</p>
+    <div class="dumb reveal">
+      <div class="card">
+        <h4>Harness effect &middot; Issue <span class="sc">F&rarr;P</span> (%)</h4>
+        <div class="legend"><span><i style="background:var(--s1)"></i>Native harness (Codex / Claude Code)</span><span><i style="background:var(--s2)"></i>mini-SWE-agent</span></div>
+        <div id="dbIssue"></div>
+      </div>
+      <div class="card">
+        <h4>Harness effect &middot; Sanitizer families</h4>
+        <div class="legend"><span><i style="background:var(--s1)"></i>Native harness (Codex / Claude Code)</span><span><i style="background:var(--s2)"></i>mini-SWE-agent</span></div>
+        <div id="dbSan"></div>
+      </div>
+    </div>
+    <p class="note">The same model can rank differently depending on its harness: GPT-6.1 Sol gains 7.4 points in Codex, while Sonnet 5.5 gains 8.1 points in mini-SWE-agent. The harness controls tool access, the execution workflow and context management.</p>
+  </section>
+
+  <section id="difficulty">
+    <p class="eyebrow">Issue reproduction</p>
+    <h2>Success by Difficulty</h2>
+    <p class="lede">Issue-reproduction success by annotated science difficulty, SWE difficulty and Science/SWE composition.</p>
+    <div class="card reveal"><div class="hm-wrap"><table class="hm" id="diffHM"></table>
+      <div class="scale"><span>0%</span><span class="grad" id="diffGrad"></span><span>100%</span></div></div></div>
+    <p class="note">Percentages under column labels give each group's share of the 149 tasks. Labels were proposed by models and reviewed task by task by researchers. On hard science tasks, Opus 5.5 leads (50%), even though GPT-6.1 Sol is ahead on easy ones (71% vs. 60%).</p>
+  </section>
+
+  <section id="repos">
+    <p class="eyebrow">Sanitizer-guided generation</p>
+    <h2>Triggered Families per Repository</h2>
+    <p class="lede">Distinct invariant families triggered by each configuration, per repository.</p>
+    <div class="card reveal"><div class="hm-wrap"><table class="hm" id="sanHM"></table>
+      <div class="scale"><span>0</span><span class="grad" id="sanGrad"></span><span>8 families</span></div></div></div>
+    <p class="note">GPT-6.1 Sol in Codex triggers at least one family in every repository, and 57 of 387 overall. An untriggered family may reflect unsuccessful input construction, an unreached code path, or the absence of a violation at the pinned revision, so these counts do not rank repository difficulty.</p>
+  </section>
+
+  <section id="figures">
+    <p class="eyebrow">Paper figures</p>
+    <h2>More Figures from the Paper</h2>
+    <div class="tabs" id="figTabs" role="tablist">
+      <button class="on" data-f="f3">Domain</button><button data-f="f2">Difficulty bars</button><button data-f="f5">Joint difficulty</button><button data-f="f8">Cost</button><button data-f="f10">Budget</button><button data-f="f9">Test size</button>
+    </div>
+    <figure class="figpane" data-f="f3"><div class="figcard" style="max-width:560px;margin:0 auto"><img src="assets/fig3_radar_domain.png" alt="Success across six domains" loading="lazy"></div><figcaption><b>Issue-reproduction success across six scientific domains.</b> Sector widths indicate domain shares; radial distance gives <span class="sc">Fail</span>&rarr;<span class="sc">Pass</span> rates. &dagger; marks domains with fewer than eight instances.</figcaption></figure>
+    <figure class="figpane" data-f="f2" hidden><div class="figcard"><img src="assets/fig2_difficulty_bars.png" alt="Success by difficulty" loading="lazy"></div><figcaption><b>Success by Science Difficulty (left) and SWE Difficulty (right)</b> for all eight configurations. The two dimensions are annotated separately.</figcaption></figure>
+    <figure class="figpane" data-f="f5" hidden><div class="figcard"><img src="assets/fig5_sci_x_swe_heatmap.png" alt="Joint difficulty heatmap" loading="lazy"></div><figcaption><b>Joint breakdown by Science (rows) and SWE (columns) difficulty.</b> The first panel pools all eight configurations. &dagger; marks cells with fewer than four instances.</figcaption></figure>
+    <figure class="figpane" data-f="f8" hidden><div class="figcard" style="max-width:560px;margin:0 auto"><img src="assets/fig8_cost.png" alt="Success versus cost" loading="lazy"></div><figcaption><b>Success vs. mean API-equivalent cost</b> per instance, estimated from recorded token usage including caching.</figcaption></figure>
+    <figure class="figpane" data-f="f10" hidden><div class="figcard" style="max-width:560px;margin:0 auto"><img src="assets/fig10_cost_budget_curve.png" alt="Pass rate under cost thresholds" loading="lazy"></div><figcaption><b>Retrospective success under per-instance cost thresholds.</b> These curves filter completed runs; they are not measurements of agents stopped at a budget.</figcaption></figure>
+    <figure class="figpane" data-f="f9" hidden><div class="figcard" style="max-width:560px;margin:0 auto"><img src="assets/fig9_patch_size.png" alt="Patch size" loading="lazy"></div><figcaption><b>Median changed lines</b> for resolved (filled) and unresolved (open) instances. The figure shows an association only, not a cause.</figcaption></figure>
+  </section>
+<div class="pager"><a class="card" href="method.html"><small>&larr; Previous</small><b>Method</b></a><a class="card nx" href="cases.html"><small>Next &rarr;</small><b>Failure Cases</b></a></div>
+</main>
+
+<footer><div class="wrap">
+  <p>SciTestBench &middot; Anonymous submission under review</p>
+  <p>Page layout follows common academic project-page conventions (e.g., Nerfies).</p>
+</div></footer>
+<div id="tip" role="tooltip"></div>
+<script src="assets/site.js"></script>
+</body>
+</html>

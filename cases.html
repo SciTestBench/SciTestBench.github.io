@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SciTestBench · Failure Cases</title>
+<meta name="description" content="Failure case analysis on SciTestBench with real agent-generated test code.">
+<meta property="og:title" content="SciTestBench · Failure Cases">
+<meta property="og:description" content="Failure case analysis on SciTestBench with real agent-generated test code.">
+<meta property="og:image" content="assets/teaser.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=Hanken+Grotesk:wght@400;500;600;700&family=Fragment+Mono:ital@0;1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+<script>try{const t=localStorage.getItem("theme");if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<symbol id="pdf" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8zM14 3v5h5M9 13h6M9 17h4"/></symbol>
+<symbol id="code" viewBox="0 0 24 24"><path d="M8 7l-5 5 5 5M16 7l5 5-5 5M14 4l-4 16"/></symbol>
+<symbol id="db" viewBox="0 0 24 24"><ellipse cx="12" cy="6" rx="8" ry="3"/><path d="M4 6v6c0 1.7 3.6 3 8 3s8-1.3 8-3V6M4 12v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6"/></symbol>
+<symbol id="bar" viewBox="0 0 24 24"><path d="M4 20h16M7 20v-8M12 20V5M17 20v-5"/></symbol>
+<symbol id="bug" viewBox="0 0 24 24"><path d="M8 8a4 4 0 0 1 8 0v1H8zM6 9h12v5a6 6 0 0 1-12 0zM12 9v11M3 13h3M18 13h3M4 7l3 2M20 7l-3 2M4 20l3-2M20 20l-3-2"/></symbol>
+<symbol id="shield" viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 4.5-3.2 8-8 9-4.8-1-8-4.5-8-9V6zM9 12l2.2 2.2L15.5 10"/></symbol>
+<symbol id="copy" viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></symbol>
+<symbol id="moon" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></symbol>
+<symbol id="sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></symbol>
+<symbol id="check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
+<symbol id="x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol>
+</defs></svg>
+
+<nav><div class="wrap">
+  <a class="brand" href="index.html">SciTestBench</a>
+  <div class="links">
+    <a href="index.html">Overview</a><a href="method.html">Method</a><a href="analysis.html">Analysis</a><a href="cases.html">Failure Cases</a><a href="impact.html">Impact</a>
+  </div>
+  <button class="theme" id="theme" aria-label="Toggle color theme"><svg class="i"><use href="#moon"/></svg></button>
+</div></nav>
+
+<header class="phead"><div class="wrap">
+  <p class="crumb"><a href="index.html">SciTestBench</a> / Failure Cases</p>
+  <h1>How Agents Get Scientific Tests Wrong</h1>
+  <p class="lede">An audit of the leading configuration's (GPT-6.1 Sol) unresolved issue tasks, followed by real test code the agents generated.</p>
+  <div class="toc"><a href="#audit">Failure audit</a><a href="#explorer">Case explorer</a></div>
+</div></header>
+<main class="wrap">
+
+  <section id="audit">
+    <p class="eyebrow">Audit</p>
+    <h2>Failure Mechanisms</h2>
+    <div class="audit reveal">
+      <div class="card" id="auditChart"></div>
+      <div class="audit-side">
+        <p>Most failures are tests that <b style="color:var(--ink)">pass on the buggy code</b>. The test runs, but its input never reaches the faulty behavior, or its oracle cannot detect it. The remaining failures <b style="color:var(--ink)">reject the fixed code</b>.</p>
+        <ul>
+          <li><b>Mechanism mismatch</b> (30.8% across both outcomes): the test exposes a real failure, but not the one the reference fix repairs.</li>
+          <li><b>Incorrect scientific premise</b> (15.4%): the oracle encodes a physical equivalence or tolerance that does not hold.</li>
+          <li><b>Failure to expose the bug</b> (53.8%): the input never reaches the critical regime.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="explorer">
+    <p class="eyebrow">Case explorer</p>
+    <h2>Ten Worked Cases</h2>
+    <p class="lede">Select a case to see the generated test, what went wrong and the key numbers. Each case has its own link.</p>
+    <div class="cx reveal" style="margin-top:0">
+      <div class="cx-list" id="cxList" role="tablist"></div>
+      <div class="card cx-panel" id="cxPanel" aria-live="polite"></div>
+    </div>
+  </section>
+<div class="pager"><a class="card" href="analysis.html"><small>&larr; Previous</small><b>Analysis</b></a><a class="card nx" href="impact.html"><small>Next &rarr;</small><b>Impact</b></a></div>
+</main>
+
+<footer><div class="wrap">
+  <p>SciTestBench &middot; Anonymous submission under review</p>
+  <p>Page layout follows common academic project-page conventions (e.g., Nerfies).</p>
+</div></footer>
+<div id="tip" role="tooltip"></div>
+<script src="assets/site.js"></script>
+<script src="assets/cases.js"></script>
+</body>
+</html>
